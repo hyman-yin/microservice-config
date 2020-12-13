@@ -1,0 +1,61 @@
+# 示例：后续系统项目可以不用自定义application.yml，而是通过配置中心读取此文件即可
+spring:
+  profiles:
+    active:
+    - dev
+---
+server:
+  port: 8001
+
+spring:
+  profiles: dev
+  application:
+    name: microservicecloud-config-provider-client
+  datasource:
+    type:
+    driver-class-name:
+    url:
+    username:
+    password:
+    dbcp2:
+      min-idle: 5
+  mybatis:
+    config-location:
+    type-aliases-package:
+    mapper-locations:
+    - classpath: mybatis/mapper/*.xml
+  eureka:
+    client:
+      server-url:
+        defaultZone: http://eureka7001.com:7001/eureka
+    instance:
+      instance-id: provider-8001
+      prefer-ip-address: true
+---
+server:
+  port: 8001
+
+spring:
+  profiles: dev
+  application:
+    name: microservicecloud-config-provider-client
+  datasource:
+    type:
+    driver-class-name:
+    url:
+    username:
+    password:
+    dbcp2:
+      min-idle: 5
+  mybatis:
+    config-location:
+    type-aliases-package:
+    mapper-locations:
+      - classpath: mybatis/mapper/*.xml
+  eureka:
+    client:
+      server-url:
+        defaultZone: http://eureka7001.com:7001/eureka
+    instance:
+      instance-id: provider-8001
+      prefer-ip-address: true
