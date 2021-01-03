@@ -4,8 +4,8 @@ spring:
     active:
     - dev
 ---
-server:
-  port: 8001
+#server:
+#  port: 8001
 
 spring:
   profiles: dev
@@ -32,8 +32,8 @@ spring:
       instance-id: provider-8001
       prefer-ip-address: true
 ---
-server:
-  port: 8001
+#server:
+#  port: 8001
 
 spring:
   profiles: dev

@@ -3,8 +3,8 @@ spring:
     active:
       - dev
 ---
-server:
-  port: 10000
+#server:
+#  port: 10000
 spring:
   profiles: dev
   application:
@@ -14,8 +14,8 @@ eureka:
     server-url:
       defaultZone: http://eureka1:11111/eureka/,http://eureka2:11112/eureka/
 ---
-server:
-  port: 10001
+#server:
+#  port: 10001
 spring:
   profiles: test
   application:
