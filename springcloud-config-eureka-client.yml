@@ -1,0 +1,42 @@
+eureka:
+  instance:
+    hostname: eureka1
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: http://eureka1:11111/eureka/,http://eureka2:11112/eureka/
+---
+server:
+  port: 7001
+
+spring:
+  profiles: dev
+  application:
+    name: springcloud-config-eureka-client
+
+eureka:
+  instance:
+    hostname: eureka1
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: http://eureka1:11111/eureka/,http://eureka2:11112/eureka/
+---
+server:
+  port: 7001
+
+spring:
+  profiles: test
+  application:
+    name: springcloud-config-eureka-client
+
+eureka:
+  instance:
+    hostname: eureka1
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: http://eureka1:11111/eureka/,http://eureka2:11112/eureka/
