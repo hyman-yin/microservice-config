@@ -6,7 +6,7 @@ spring:
 server:
   port: 10000
 spring:
-  profiels: dev
+  profiles: dev
   application:
     name: springcloud-config-client
 eureka:
@@ -17,7 +17,7 @@ eureka:
 server:
   port: 10001
 spring:
-  profiels: test
+  profiles: test
   application:
     name: springcloud-config-client
 eureka:
