@@ -19,9 +19,12 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     server-url:
-      defaultZone: http://eureka1:11111/eureka/,http://eureka2:11112/eureka/,http://eureka2:11112/eureka/
+      defaultZone: http://eureka1:11111/eureka/,http://eureka2:11112/eureka/
   instance:
     prefer-ip-address: true
+
+test:
+  getName: aaabbb
 
 management:
   endpoint:
@@ -61,6 +64,9 @@ eureka:
       defaultZone: http://eureka1:11111/eureka/,http://eureka2:11112/eureka/
   instance:
     prefer-ip-address: true
+
+test:
+  getName: bbbccc
 
 management:
   endpoint:
