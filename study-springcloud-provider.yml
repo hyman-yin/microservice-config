@@ -1,0 +1,81 @@
+spring:
+  profiles:
+    active:
+      - dev
+---
+spring:
+  profiles: dev
+  application:
+    name: provider
+  devtools:
+    restart:
+      enabled: true  #支持重启
+      additional-paths: src/main/java
+      exclude: WEB-INF/**
+  freemarker:
+    cache: false    #页面不缓存，前台页面修改后立即生效，会刷新页面
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: false
+    server-url:
+      defaultZone: http://eureka1:11111/eureka/,http://eureka2:11112/eureka/
+  instance:
+    prefer-ip-address: true
+
+management:
+  endpoint:
+    shutdown:
+      enabled: true # 启用shutdown端口，可访问：http://localhost:33332/actuator/shutdown 关闭服务。注意要使用post方法。此操作非常危险，所以一定要设置安全校验
+    health:
+      show-details: always # 访问/health端点时，展示所有详细信息，默认只展示简单信息
+  endpoints:
+    enabled-by-default: true # 默认都启用
+    web:
+      exposure:
+        include: "*" # 开放所有页面节点
+
+logging:
+  level:
+    root: info
+    org.springframework: info
+    org.mybatis: info
+      
+---
+spring:
+  profiles: test
+  application:
+    name: provider
+  devtools:
+    restart:
+      enabled: true  #支持重启
+      additional-paths: src/main/java
+      exclude: WEB-INF/**
+  freemarker:
+    cache: false    #页面不缓存，前台页面修改后立即生效，会刷新页面
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: false
+    server-url:
+      defaultZone: http://eureka1:11111/eureka/,http://eureka2:11112/eureka/
+  instance:
+    prefer-ip-address: true
+
+management:
+  endpoint:
+    shutdown:
+      enabled: true # 启用shutdown端口，可访问：http://localhost:33332/actuator/shutdown 关闭服务。注意要使用post方法。此操作非常危险，所以一定要设置安全校验
+    health:
+      show-details: always # 访问/health端点时，展示所有详细信息，默认只展示简单信息
+  endpoints:
+    enabled-by-default: true # 默认都启用
+    web:
+      exposure:
+        include: "*" # 开放所有页面节点
+
+logging:
+  level:
+    root: info
+    org.springframework: info
+    org.mybatis: info
