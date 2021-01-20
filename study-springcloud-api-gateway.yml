@@ -1,0 +1,138 @@
+spring:
+  profiles:
+    active:
+      - dev
+---
+# springboot也支持根据环境的不同来读取不同的配置，比较常见的是DB连接属性。不同环境连接不同的环境的DB
+spring:
+  profiles: dev
+  devtools:
+    restart:
+      enabled: true  #支持重启
+      additional-paths: src/main/java
+      exclude: WEB-INF/**
+  freemarker:
+    cache: false    #页面不缓存，前台页面修改后立即生效，会刷新页面
+  cloud:
+    loadbalancer:
+      retry:
+        enabled: true # 开启重试机制，默认关闭。
+
+# 配置服务映射。访问：http://localhost:55552/api-a/hello,就会跳转到访问PROVIDER的/hello接口。访问：http://localhost:55552/api-b/hello，就会访问CONSUMER-FEIGN的/hello接口
+# 这里配置的path是对浏览器访问地址的过滤,可以使用通配符：?代表任意单个字符；*代表任意数量字符，不支持多层目录；** 代表任意字符，并且支持多层目录
+# serviceId是指要转发到的服务名，这里的服务名称是Eureka注册中心维护的名称
+zuul:
+  # ignored-patterns: /**/hello/** # 设置不需要路由的规则，这样当访问路径中包含/hello/时，就不会被路由了，这样可能会导致服务不可用，慎用
+  routes:
+    api-a:
+      path: /api-a/**
+      serviceId: PROVIDER
+      customSensitiveHeaders: true # 2,设置cookie生效的第二个方法，开启自定义敏感头
+    api-b:
+      path: /api-b/**
+      serviceId: CONSUMER
+      sensitiveHeaders: # 3,第三种方法，将指定路由的敏感头设置为空
+    api-c:
+      path: /api-c/**
+      url: forward:/local # 这里配置本地路由规则。当访问：/api-c/hello时，会转发到本服务实例的 /local/hello 接口处理,如果要能处理它，本地需要新增/local/hello接口
+    # zuul默认会过滤掉http请求头信息中的一些敏感信息，包括：cookie，set-cooket, authorization，因此如果使用了springsecurity或者shrio等安全架构时，
+    # 可能无法实现登录和鉴权，为了解决这个问题，有以下三种方法
+    sensitive-headers:  # 1,这里设置全局参数为空来覆盖默认值，不推荐使用，因为会让所有请求都带上敏感参数
+
+  AccessFilter: # 配置指定过滤器类的方法是否生效，下面列举了四种过滤器类型
+    pre:
+      disable: true
+    route:
+      disable: false
+    post:
+      disable: false
+    error:
+      disable: false
+
+# 开启feign的压缩功能，减少通信过程中的性能损耗
+feign:
+  compression:
+    request:
+      enabled: true
+      mime-types: "text/xml,application/xml,application/json"
+      min-request-size: 2048
+
+# actuator监控，可以访问：【http://IP:PORT/actuator/端点名称】 来访问监控信息，比如：http://localhost:55552/actuator/beans 来展示当前注册的bean
+management:
+  endpoint:
+    shutdown:
+      enabled: true # 启用shutdown端口，可访问：http://localhost:55552/actuator/shutdown 关闭服务。注意要使用post方法。此操作非常危险，所以一定要设置安全校验
+    health:
+      show-details: always # 访问/health端点时，展示所有详细信息，默认只展示简单信息
+  endpoints:
+    enabled-by-default: true # 默认都启用
+    web:
+      exposure:
+        include: "*" # 开放所有页面节点
+---
+# springboot也支持根据环境的不同来读取不同的配置，比较常见的是DB连接属性。不同环境连接不同的环境的DB
+spring:
+  profiles: test
+  devtools:
+    restart:
+      enabled: true  #支持重启
+      additional-paths: src/main/java
+      exclude: WEB-INF/**
+  freemarker:
+    cache: false    #页面不缓存，前台页面修改后立即生效，会刷新页面
+  cloud:
+    loadbalancer:
+      retry:
+        enabled: true # 开启重试机制，默认关闭。
+
+# 配置服务映射。访问：http://localhost:55552/api-a/hello,就会跳转到访问PROVIDER的/hello接口。访问：http://localhost:55552/api-b/hello，就会访问CONSUMER-FEIGN的/hello接口
+# 这里配置的path是对浏览器访问地址的过滤,可以使用通配符：?代表任意单个字符；*代表任意数量字符，不支持多层目录；** 代表任意字符，并且支持多层目录
+# serviceId是指要转发到的服务名，这里的服务名称是Eureka注册中心维护的名称
+zuul:
+  # ignored-patterns: /**/hello/** # 设置不需要路由的规则，这样当访问路径中包含/hello/时，就不会被路由了，这样可能会导致服务不可用，慎用
+  routes:
+    api-a:
+      path: /api-a/**
+      serviceId: PROVIDER
+      customSensitiveHeaders: true # 2,设置cookie生效的第二个方法，开启自定义敏感头
+    api-b:
+      path: /api-b/**
+      serviceId: CONSUMER
+      sensitiveHeaders: # 3,第三种方法，将指定路由的敏感头设置为空
+    api-c:
+      path: /api-c/**
+      url: forward:/local # 这里配置本地路由规则。当访问：/api-c/hello时，会转发到本服务实例的 /local/hello 接口处理,如果要能处理它，本地需要新增/local/hello接口
+    # zuul默认会过滤掉http请求头信息中的一些敏感信息，包括：cookie，set-cooket, authorization，因此如果使用了springsecurity或者shrio等安全架构时，
+    # 可能无法实现登录和鉴权，为了解决这个问题，有以下三种方法
+    sensitive-headers:  # 1,这里设置全局参数为空来覆盖默认值，不推荐使用，因为会让所有请求都带上敏感参数
+
+  AccessFilter: # 配置指定过滤器类的方法是否生效，下面列举了四种过滤器类型
+    pre:
+      disable: true
+    route:
+      disable: false
+    post:
+      disable: false
+    error:
+      disable: false
+
+# 开启feign的压缩功能，减少通信过程中的性能损耗
+feign:
+  compression:
+    request:
+      enabled: true
+      mime-types: "text/xml,application/xml,application/json"
+      min-request-size: 2048
+
+# actuator监控，可以访问：【http://IP:PORT/actuator/端点名称】 来访问监控信息，比如：http://localhost:55552/actuator/beans 来展示当前注册的bean
+management:
+  endpoint:
+    shutdown:
+      enabled: true # 启用shutdown端口，可访问：http://localhost:55552/actuator/shutdown 关闭服务。注意要使用post方法。此操作非常危险，所以一定要设置安全校验
+    health:
+      show-details: always # 访问/health端点时，展示所有详细信息，默认只展示简单信息
+  endpoints:
+    enabled-by-default: true # 默认都启用
+    web:
+      exposure:
+        include: "*" # 开放所有页面节点
